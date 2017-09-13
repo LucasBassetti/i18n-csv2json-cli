@@ -2,6 +2,8 @@
 
 > A CLI to convert i18n CSV/TSV files to JSON.
 
+[![Build Status](https://travis-ci.org/LucasBassetti/i18n-csv2json-cli.svg?branch=master)](https://travis-ci.org/LucasBassetti/i18n-csv2json-cli)
+
 ### Installing
 
 `npm install -g i18n-csv2json-cli`
