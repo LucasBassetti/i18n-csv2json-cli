@@ -1,6 +1,6 @@
 {
   "name": "i18n-csv2json-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CLI to convert i18n CSV/TSV files to JSON",
   "main": "index.js",
   "scripts": {
