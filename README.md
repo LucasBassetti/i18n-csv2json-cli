@@ -38,7 +38,7 @@ Options:
 key,en,de
 abc.efg.hij,test_en,test_de
 abc.efg.hik,test_en2,test_de2
-abc.efa,test en3,test de3`;
+abc.efa,test en3,test de3
 ```
 
 #### Output
