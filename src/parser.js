@@ -13,14 +13,14 @@ function stringToObj(path, value, obj) {
   obj[last] = value;
 }
 //Function that makes array out of csv file
-function csvToArray (text) {
+function csvToArray (text, splitEl) {
   let p = '', row = [''], ret = [row], i = 0, r = 0, s = !0, l;
   for (l in text) {
     l = text[l];
     if ('"' === l) {
       if (s && l === p) row[i] += l;
       s = !s;
-    } else if (',' === l && s) l = row[++i] = '';
+    } else if (splitEl === l && s) l = row[++i] = '';
     else if ('\n' === l && s) {
       if ('\r' === p) row[i] = row[i].slice(0, -1);
       row = ret[++r] = [l = '']; i = 0;
@@ -34,7 +34,7 @@ function parseFile({ options, data }) {
   return new Promise((resolve) => {
     const { from } = options;
     const splitEl = /.csv$/.test(from) ? ',' : '\t';
-    const lines = csvToArray(data)
+    const lines = csvToArray(data, splitEl)
     const files = lines[0]
     const result = {};
 
