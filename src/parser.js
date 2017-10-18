@@ -12,21 +12,41 @@ function stringToObj(path, value, obj) {
 
   obj[last] = value;
 }
-//Function that makes array out of csv file
-function csvToArray (text, splitEl) {
-  let p = '', row = [''], ret = [row], i = 0, r = 0, s = !0, l;
-  for (l in text) {
-    l = text[l];
-    if ('"' === l) {
-      if (s && l === p) row[i] += l;
+
+function csvToArray(text, splitEl) {
+  let p = '';
+  let row = [''];
+  const ret = [row];
+  let i = 0;
+  let r = 0;
+  let s = !0;
+  let line;
+  for (const l in text) {
+    line = text[l];
+    if (line === '"') {
+      if (s && line === p) row[i] += line;
       s = !s;
-    } else if (splitEl === l && s) l = row[++i] = '';
-    else if ('\n' === l && s) {
-      if ('\r' === p) row[i] = row[i].slice(0, -1);
-      row = ret[++r] = [l = '']; i = 0;
-    } else row[i] += l;
-    p = l;
+    } else if (splitEl === line && s) {
+      i += 1;
+      row[i] = '';
+      line = row[i];
+    } else if (line === '\n' && s) {
+      if (p === ' ===') {
+        row[i] = row[i].slice(0, -1);
+      }
+
+      r += 1;
+      line = '';
+      ret[r] = [line];
+      row = ret[r];
+      i = 0;
+    } else {
+      row[i] += line;
+    }
+
+    p = line;
   }
+
   return ret;
 }
 
@@ -34,8 +54,8 @@ function parseFile({ options, data }) {
   return new Promise((resolve) => {
     const { from } = options;
     const splitEl = /.csv$/.test(from) ? ',' : '\t';
-    const lines = csvToArray(data, splitEl)
-    const files = lines[0]
+    const lines = csvToArray(data, splitEl);
+    const files = lines[0];
     const result = {};
 
     lines.splice(0, 1);
@@ -46,7 +66,7 @@ function parseFile({ options, data }) {
     }
 
     for (let i = 0, len = lines.length; i < len; i += 1) {
-      const columns = lines[i]
+      const columns = lines[i];
 
       for (let j = 1, jlen = columns.length; j < jlen; j += 1) {
         const key = columns[0];

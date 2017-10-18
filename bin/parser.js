@@ -17,6 +17,43 @@ function stringToObj(path, value, obj) {
   obj[last] = value;
 }
 
+function csvToArray(text, splitEl) {
+  var p = '';
+  var row = [''];
+  var ret = [row];
+  var i = 0;
+  var r = 0;
+  var s = !0;
+  var line = void 0;
+  for (var l in text) {
+    line = text[l];
+    if (line === '"') {
+      if (s && line === p) row[i] += line;
+      s = !s;
+    } else if (splitEl === line && s) {
+      i += 1;
+      row[i] = '';
+      line = row[i];
+    } else if (line === '\n' && s) {
+      if (p === ' ===') {
+        row[i] = row[i].slice(0, -1);
+      }
+
+      r += 1;
+      line = '';
+      ret[r] = [line];
+      row = ret[r];
+      i = 0;
+    } else {
+      row[i] += line;
+    }
+
+    p = line;
+  }
+
+  return ret;
+}
+
 function parseFile(_ref) {
   var options = _ref.options,
       data = _ref.data;
@@ -25,10 +62,8 @@ function parseFile(_ref) {
     var from = options.from;
 
     var splitEl = /.csv$/.test(from) ? ',' : '\t';
-    var lines = data.split('\n').map(function (line) {
-      return line.replace(/(\r|'|")/g, '');
-    });
-    var files = lines[0].split(splitEl);
+    var lines = csvToArray(data, splitEl);
+    var files = lines[0];
     var result = {};
 
     lines.splice(0, 1);
@@ -39,7 +74,7 @@ function parseFile(_ref) {
     }
 
     for (var _i = 0, _len = lines.length; _i < _len; _i += 1) {
-      var columns = lines[_i].split(splitEl);
+      var columns = lines[_i];
 
       for (var j = 1, jlen = columns.length; j < jlen; j += 1) {
         var key = columns[0];
